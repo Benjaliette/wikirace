@@ -1,0 +1,15 @@
+// Import configuration styles
+@import "config/sizes";
+@import "config/fonts";
+@import "config/colors";
+
+// Import components style
+@import "components/index";
+
+body {
+  margin: 0;
+}
+
+a {
+  text-decoration: inherit !important;
+}
