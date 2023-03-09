@@ -15,5 +15,7 @@ module.exports = {
   rules: {
     "no-unused-vars": "off",
     "no-undef": "off",
+    "vue/no-multiple-template-root": "off",
+    "no-console": "off",
   },
 };

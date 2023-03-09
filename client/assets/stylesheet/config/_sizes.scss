@@ -2,7 +2,8 @@ h1 {
   font-size: 28px;
   text-transform: uppercase;
 
-  &::first-letter, span {
+  &::first-letter,
+  span {
     font-size: 36px;
   }
 }
