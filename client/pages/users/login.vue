@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <!-- <div>
     <form action="" @submit.prevent="submitForm">
       <div class="form-group">
         <label for="username">Nom d'utilisateur:</label>
@@ -23,7 +23,38 @@
       </li>
     </ul>
     <p v-if="token">{{ token }}</p>
-  </div>
+  </div> -->
+  <section>
+    <div class="section__div">
+      <div class="form__header">
+        <h1>Se connecter</h1>
+        <p>Et gardez vos scores</p>
+      </div>
+      <form action="" @submit.prevent="submitForm">
+        <div class="form__inputs">
+          <FormTextInput
+            v-model="user.username"
+            type="text"
+            label="Nom d'utilisateur"
+          />
+          <FormTextInput
+            v-model="user.password"
+            type="password"
+            label="Mot de passe"
+          />
+        </div>
+        <div class="form__actions">
+          <BaseButton size="lg" color="blue" type="submit">
+            Connexion
+          </BaseButton>
+        </div>
+        <p>
+          Vous n'avez pas de compte ? Cliquez
+          <NuxtLink to="/users/signup/">ici</NuxtLink>
+        </p>
+      </form>
+    </div>
+  </section>
 </template>
 
 <script setup>
@@ -47,6 +78,7 @@ const errors = reactive({
 const url = "http://localhost:8000/api/auth/login/";
 
 const submitForm = async () => {
+  console.log(user.username);
   errors.isAny = false;
   const { data, error } = await useFetch(url, {
     method: "post",
@@ -96,3 +128,44 @@ definePageMeta({
   layout: "auth",
 });
 </script>
+
+<style scoped lang="scss">
+section {
+  flex-grow: 1;
+  height: 100vh;
+
+  .section__div {
+    width: 80%;
+    margin: 6rem auto 0 auto;
+
+    .form__header {
+      margin-bottom: 5rem;
+
+      h1,
+      p {
+        text-align: center;
+        margin: 0px auto;
+      }
+    }
+
+    form {
+      a {
+        text-decoration: underline;
+        font-weight: bold;
+
+        &:hover {
+          color: $blue;
+        }
+      }
+
+      p {
+        font-size: 0.9rem;
+      }
+
+      .form__inputs {
+        margin-bottom: 6rem;
+      }
+    }
+  }
+}
+</style>

@@ -16,7 +16,7 @@
             <h3>Connexion</h3>
           </NuxtLink>
           <button v-else>
-            {{ user }}
+            <IconUser />
           </button>
         </div>
       </div>
@@ -87,6 +87,17 @@ nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
+
+      .nav-account button {
+        background: none;
+        color: inherit;
+        border: 1px solid $white;
+        padding: 0.6rem 0.8rem;
+        border-radius: 10px;
+        font: inherit;
+        cursor: pointer;
+        outline: inherit;
+      }
     }
 
     > span {

@@ -1,6 +1,12 @@
 <template>
-  <TheBanner />
-  <div>
+  <main>
+    <TheBanner />
     <slot />
-  </div>
+  </main>
 </template>
+
+<style scoped lang="scss">
+main {
+  display: flex;
+}
+</style>

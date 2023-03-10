@@ -161,7 +161,7 @@ ACCOUNT_EMAIL_REQUIRED = False
 
 REST_AUTH = {
 
-    'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
+    'LOGIN_SERIALIZER': 'custom_auth.serializers.LoginSerializer',
     'TOKEN_SERIALIZER': 'dj_rest_auth.serializers.TokenSerializer',
     'JWT_SERIALIZER': 'dj_rest_auth.serializers.JWTSerializer',
     'JWT_SERIALIZER_WITH_EXPIRATION': 'dj_rest_auth.serializers.JWTSerializerWithExpiration',
