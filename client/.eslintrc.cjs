@@ -17,5 +17,6 @@ module.exports = {
     "no-undef": "off",
     "vue/no-multiple-template-root": "off",
     "no-console": "off",
+    "vue/multi-word-component-names": "off",
   },
 };

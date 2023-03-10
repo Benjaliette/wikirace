@@ -1,5 +1,5 @@
 <template>
-  <TheHeader />
+  <TheBanner />
   <div>
     <slot />
   </div>

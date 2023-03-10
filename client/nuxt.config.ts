@@ -17,4 +17,13 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@import "~/assets/stylesheet/config/index.scss";',
+        },
+      },
+    },
+  },
 });

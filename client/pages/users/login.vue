@@ -91,4 +91,8 @@ const submitForm = async () => {
   //   errors.text = Object.values(error.value.data);
   // }
 };
+
+definePageMeta({
+  layout: "auth",
+});
 </script>
