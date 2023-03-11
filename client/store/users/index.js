@@ -75,7 +75,13 @@ export const useUserStore = defineStore("user", {
       this.user = { status: { loggedIn: true }, user };
       localStorage.setItem("user", JSON.stringify(user));
     },
-    logout() {
+    async logout() {
+      const { data, error } = await useFetch(baseApi + "logout/", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       this.user = { status: { loggedIn: false }, user: null };
       localStorage.removeItem("user");
     },

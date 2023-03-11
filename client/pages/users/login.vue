@@ -1,6 +1,6 @@
 <template>
   <section>
-    <FormAuth type="login" :errors="errors" @submit="submitForm">
+    <FormAuth type="login" :errors="errors.other" @submit="submitForm">
       <template #header>
         <h1>Se connecter</h1>
         <p class="subtitle">Et gardez vos scores</p>
@@ -10,11 +10,13 @@
           v-model="user.username"
           type="text"
           label="Nom d'utilisateur"
+          :error="errors.username"
         />
         <FormTextInput
           v-model="user.password"
           type="password"
           label="Mot de passe"
+          :error="errors.password"
         />
       </template>
     </FormAuth>
@@ -35,7 +37,9 @@ const user = reactive({
 
 const errors = reactive({
   isAny: false,
-  text: null,
+  username: [],
+  password: [],
+  other: [],
 });
 
 const url = "http://localhost:8000/api/auth/login/";
@@ -59,7 +63,13 @@ const submitForm = async () => {
         router.push("/landing");
       } else {
         errors.isAny = true;
-        errors.text = Object.values(response._data).flat();
+        Object.entries(response._data).forEach(([field, error]) => {
+          if (field === "non_field_errors") {
+            errors.other = error;
+          } else {
+            errors[field] = error;
+          }
+        });
       }
     },
   });
@@ -74,6 +84,7 @@ definePageMeta({
 section {
   flex-grow: 1;
   height: 100vh;
+  display: flex;
 
   h1,
   .subtitle {

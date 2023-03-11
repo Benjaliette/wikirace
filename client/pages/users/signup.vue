@@ -1,26 +1,34 @@
 <template>
   <section>
-    <FormAuth type="signup" :errors="errors" @submit="submitForm">
+    <FormAuth type="signup" :errors="errors.other" @submit="submitForm">
       <template #header>
         <h1>S'enregistrer</h1>
         <p class="subtitle">Pour garder vos scores</p>
       </template>
       <template #form-inputs>
         <FormTextInput
-          v-model="user.username"
+          v-model.trim="user.username"
           type="text"
           label="Nom d'utilisateur"
+          :error="errors.username"
         />
-        <FormTextInput v-model="user.email" type="email" label="E-mail" />
         <FormTextInput
-          v-model="user.password1"
+          v-model.trim="user.email"
+          type="text"
+          label="E-mail"
+          :error="errors.email"
+        />
+        <FormTextInput
+          v-model.trim="user.password1"
           type="password"
           label="Mot de passe"
+          :error="errors.password1"
         />
         <FormTextInput
-          v-model="user.password2"
+          v-model.trim="user.password2"
           type="password"
           label="Confirmez le mot de passe"
+          :error="errors.password2"
         />
       </template>
     </FormAuth>
@@ -35,7 +43,11 @@ const router = useRouter();
 const url = "http://localhost:8000/api/auth/registration/";
 const errors = reactive({
   isAny: false,
-  text: null,
+  username: [],
+  email: [],
+  password1: [],
+  password2: [],
+  other: [],
 });
 
 const user = reactive({
@@ -65,7 +77,9 @@ const submitForm = async () => {
         router.push("/landing");
       } else {
         errors.isAny = true;
-        errors.text = Object.values(response._data).flat();
+        Object.entries(response._data).forEach(([field, error]) => {
+          errors[field] = error;
+        });
       }
     },
   });
@@ -80,6 +94,7 @@ definePageMeta({
 section {
   flex-grow: 1;
   height: 100vh;
+  display: flex;
 
   h1,
   .subtitle {

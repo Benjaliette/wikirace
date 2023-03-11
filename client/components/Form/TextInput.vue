@@ -1,7 +1,16 @@
 <template>
-  <div class="form-group">
-    <input required class="form-control" :type="type" @input="updateValue" />
+  <div class="form-group" :class="errored">
+    <input
+      required
+      class="form-control"
+      :type="type"
+      @input="updateValue"
+      @blur="clearError"
+    />
     <label class="form-label">{{ label }}</label>
+    <div v-for="(err, index) in error" :key="index" class="error__div">
+      <div v-if="clear">{{ err }}</div>
+    </div>
   </div>
 </template>
 
@@ -17,13 +26,41 @@ const props = defineProps({
     default: "Label",
     required: true,
   },
+  error: {
+    type: Array,
+    default: new Array(0),
+    required: true,
+  },
 });
+
+const clear = ref(true);
 
 const emits = defineEmits(["update:modelValue"]);
 
 const updateValue = (event) => {
   emits("update:modelValue", event.target.value);
 };
+
+const isError = computed(() => {
+  return props.error.length !== 0;
+});
+
+const clearError = (event) => {
+  if (event.target.value !== "") {
+    clear.value = false;
+  }
+};
+
+watch(
+  () => props.error,
+  (_count, _prevCount) => {
+    clear.value = true;
+  }
+);
+
+const errored = computed(() => {
+  return { error: clear.value && isError.value };
+});
 </script>
 
 <style lang="scss" scoped>
@@ -72,6 +109,47 @@ const updateValue = (event) => {
         font-size: 12px;
         color: $blue;
         transform: translateY(-25px);
+      }
+    }
+  }
+
+  &.error {
+    .form-label {
+      color: $red;
+    }
+
+    .form-control {
+      border-bottom: 1px solid $red;
+      color: $red;
+
+      &:invalid {
+        outline: none;
+      }
+
+      &:focus,
+      &:valid {
+        outline: none;
+
+        box-shadow: 0 1px $red;
+        border-color: $red;
+
+        + .form-label {
+          font-size: 12px;
+          color: $red;
+          transform: translateY(-25px);
+        }
+      }
+    }
+
+    .error__div {
+      margin: 0;
+      margin-top: 5px;
+
+      div {
+        color: $red;
+        font-size: 12px;
+        font-style: italic;
+        position: relative;
       }
     }
   }

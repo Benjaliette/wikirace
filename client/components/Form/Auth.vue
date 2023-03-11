@@ -3,7 +3,7 @@
     <div class="form__header">
       <slot name="header"></slot>
     </div>
-    <form action="" @submit.prevent="submitForm">
+    <form novalidate @submit.prevent="submitForm">
       <div class="form__inputs">
         <slot name="form-inputs"></slot>
       </div>
@@ -21,9 +21,9 @@
         <NuxtLink to="/users/login/">ici</NuxtLink>
       </p>
     </form>
-    <div v-if="errors.isAny" class="error__div">
+    <div v-if="errors.length !== 0" class="error__div">
       <ul>
-        <li v-for="(error, index) in errors.text" :key="index">
+        <li v-for="(error, index) in errors" :key="index">
           {{ error }}
         </li>
       </ul>
@@ -39,7 +39,7 @@ const props = defineProps({
     required: true,
   },
   errors: {
-    type: Object,
+    type: Array,
     required: true,
   },
 });
@@ -68,7 +68,7 @@ const submitForm = () => {
 <style lang="scss" scoped>
 .section__div {
   width: 80%;
-  margin: 6rem auto 0 auto;
+  margin: auto;
 
   .form__header {
     margin-bottom: 5rem;
@@ -95,6 +95,7 @@ const submitForm = () => {
 
   .error__div {
     width: 100%;
+    min-height: 0px;
     border: 2px solid $red;
     background-color: $light-red;
     padding: 1rem;

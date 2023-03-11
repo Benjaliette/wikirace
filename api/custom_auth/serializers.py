@@ -28,7 +28,7 @@ class CustomLoginSerializer(LoginSerializer):
         if username and password:
             user = self.authenticate(username=username, password=password)
         else:
-            msg = _('Must include "username" and "password".')
+            msg = _('Doit inclure le nom d\'utilisateur" et le "mot de passe".')
             raise exceptions.ValidationError(msg)
 
         return user
@@ -73,7 +73,7 @@ class CustomLoginSerializer(LoginSerializer):
             try:
                 return self.get_auth_user_using_allauth(username, email, password)
             except url_exceptions.NoReverseMatch:
-                msg = _('Unable to log in with provided credentials.')
+                msg = _('Impossible de vous identifier avec ces identifiants, veuillez réessayer')
                 raise exceptions.ValidationError(msg)
         return self.get_auth_user_using_orm(username, email, password)
 
@@ -90,7 +90,7 @@ class CustomLoginSerializer(LoginSerializer):
             allauth_account_settings.EMAIL_VERIFICATION == allauth_account_settings.EmailVerificationMethod.MANDATORY
             and not user.emailaddress_set.filter(email=user.email, verified=True).exists()
         ):
-            raise serializers.ValidationError(_('E-mail is not verified.'))
+            raise serializers.ValidationError(_("'Votre e-mail n'a pas été vérifié."))
 
     def validate(self, attrs):
         username = attrs.get('username')
@@ -99,7 +99,7 @@ class CustomLoginSerializer(LoginSerializer):
         user = self.get_auth_user(username, email, password)
 
         if not user:
-            msg = _('Unable to log in with provided credentials.')
+            msg = _("Aucun compte n'est lié à ces identifiants, veuillez réessayer")
             raise exceptions.ValidationError(msg)
 
         # Did we get back an active user?
