@@ -1,29 +1,4 @@
 <template>
-  <!-- <div>
-    <form action="" @submit.prevent="submitForm">
-      <div class="form-group">
-        <label for="username">Nom d'utilisateur:</label>
-        <input id="username" v-model="user.username" type="text" />
-      </div>
-      <div class="form-group">
-        <label for="email">Adresse e-mail:</label>
-        <input id="email" v-model="user.email" type="email" />
-      </div>
-      <div class="form-group">
-        <label for="password">Mot de passe:</label>
-        <input id="password" v-model="user.password" type="password" />
-      </div>
-      <div class="form-actions">
-        <button type="submit">Se connecter</button>
-      </div>
-    </form>
-    <ul v-if="errors.isAny">
-      <li v-for="(error, index) in errors.text" :key="index">
-        {{ error }}
-      </li>
-    </ul>
-    <p v-if="token">{{ token }}</p>
-  </div> -->
   <section>
     <div class="section__div">
       <div class="form__header">
@@ -53,6 +28,13 @@
           <NuxtLink to="/users/signup/">ici</NuxtLink>
         </p>
       </form>
+      <div v-if="errors.isAny" class="error__div">
+        <ul>
+          <li v-for="(error, index) in errors.text" :key="index">
+            {{ error }}
+          </li>
+        </ul>
+      </div>
     </div>
   </section>
 </template>
@@ -72,14 +54,14 @@ const user = reactive({
 const token = ref(null);
 const errors = reactive({
   isAny: false,
-  text: {},
+  text: null,
 });
 
 const url = "http://localhost:8000/api/auth/login/";
 
 const submitForm = async () => {
-  console.log(user.username);
   errors.isAny = false;
+  errors.text = null;
   const { data, error } = await useFetch(url, {
     method: "post",
     headers: {
@@ -90,38 +72,17 @@ const submitForm = async () => {
       email: user.email,
       password: user.password,
     }),
-    onRequest({ request, options }) {
-      console.table("Request: " + request, options);
-    },
-    onRequestError({ request, options, error }) {
-      console.error("Request error: " + error);
-      // Handle the request errors
-    },
-    onResponse({ request, response, options }) {
-      // Process the response data
+    onResponse({ _request, response, _options }) {
       if (response.ok) {
-        store.saveUser(user);
-        router.push("/landing");
+        // store.saveUser(user);
+        // router.push("/landing");
       } else {
+        console.log(response._data);
         errors.isAny = true;
-        errors.text = Object.values(response._data);
+        errors.text = Object.values(response._data).flat();
       }
     },
-    // onResponseError({ request, response, options }) {
-    //   // Handle the response errors
-    //   console.error(response._data);
-    // },
   });
-
-  // console.log(data);
-  // console.log(error);
-
-  // if (error.value.response.ok) {
-  //   console.log(data);
-  // } else {
-  //   errors.isAny = true;
-  //   errors.text = Object.values(error.value.data);
-  // }
 };
 
 definePageMeta({
@@ -164,6 +125,26 @@ section {
 
       .form__inputs {
         margin-bottom: 6rem;
+      }
+    }
+
+    .error__div {
+      width: 100%;
+      border: 2px solid $red;
+      background-color: $light-red;
+      padding: 1rem;
+      text-align: left;
+      box-sizing: border-box;
+
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+
+        li {
+          color: $red;
+          font-size: 0.9rem;
+        }
       }
     }
   }

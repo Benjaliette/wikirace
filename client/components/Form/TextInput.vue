@@ -1,12 +1,6 @@
 <template>
   <div class="form-group">
-    <input
-      style=""
-      required
-      class="form-control"
-      :type="type"
-      @input="updateValue"
-    />
+    <input required class="form-control" :type="type" @input="updateValue" />
     <label class="form-label">{{ label }}</label>
   </div>
 </template>

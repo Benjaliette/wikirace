@@ -15,9 +15,9 @@
           <NuxtLink v-if="!userLogged" to="/users/login">
             <h3>Connexion</h3>
           </NuxtLink>
-          <button v-else>
-            <IconUser />
-          </button>
+          <BaseDropdownButton v-else color="dark" for="user">
+            Bienvenue {{ username }}
+          </BaseDropdownButton>
         </div>
       </div>
       <span></span>
@@ -40,6 +40,11 @@ const isMobile = computed(() => window.innerWidth < 960);
 const toggle = () => {
   toggled.value = !toggled.value;
 };
+
+const username = computed(() => {
+  const word = user.value.username;
+  return word.charAt(0).toUpperCase() + word.slice(1);
+});
 </script>
 
 <style scoped lang="scss">
@@ -87,17 +92,6 @@ nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-
-      .nav-account button {
-        background: none;
-        color: inherit;
-        border: 1px solid $white;
-        padding: 0.6rem 0.8rem;
-        border-radius: 10px;
-        font: inherit;
-        cursor: pointer;
-        outline: inherit;
-      }
     }
 
     > span {
