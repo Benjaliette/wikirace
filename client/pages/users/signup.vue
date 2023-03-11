@@ -1,32 +1,30 @@
 <template>
-  <div>
-    <form action="" method="post" @submit.prevent="submitForm">
-      <div class="form-group">
-        <label for="username">Nom d'utilisateur:</label>
-        <input id="username" v-model="user.username" type="text" />
-      </div>
-      <div class="form-group">
-        <label for="email">Adresse e-mail:</label>
-        <input id="email" v-model="user.email" type="email" />
-      </div>
-      <div class="form-group">
-        <label for="password1">Mot de passe:</label>
-        <input id="password1" v-model="user.password1" type="password" />
-      </div>
-      <div class="form-group">
-        <label for="password2">Confirmer le mot de passe:</label>
-        <input id="password2" v-model="user.password2" type="password" />
-      </div>
-      <div class="form-actions">
-        <button type="submit">S'enregistrer</button>
-      </div>
-    </form>
-    <ul v-if="errors.isAny">
-      <li v-for="(error, index) in errors.text" :key="index">
-        {{ error }}
-      </li>
-    </ul>
-  </div>
+  <section>
+    <FormAuth type="signup" :errors="errors" @submit="submitForm">
+      <template #header>
+        <h1>S'enregistrer</h1>
+        <p class="subtitle">Pour garder vos scores</p>
+      </template>
+      <template #form-inputs>
+        <FormTextInput
+          v-model="user.username"
+          type="text"
+          label="Nom d'utilisateur"
+        />
+        <FormTextInput v-model="user.email" type="email" label="E-mail" />
+        <FormTextInput
+          v-model="user.password1"
+          type="password"
+          label="Mot de passe"
+        />
+        <FormTextInput
+          v-model="user.password2"
+          type="password"
+          label="Confirmez le mot de passe"
+        />
+      </template>
+    </FormAuth>
+  </section>
 </template>
 
 <script setup>
@@ -49,6 +47,7 @@ const user = reactive({
 
 const submitForm = async () => {
   errors.isAny = false;
+  errors.text = null;
   const { data, error } = await useFetch(url, {
     method: "post",
     headers: {
@@ -60,24 +59,32 @@ const submitForm = async () => {
       password1: user.password1,
       password2: user.password2,
     }),
-    onRequest({ request, options }) {
-      console.table("Request: " + request, options);
-    },
-    onRequestError({ request, options, error }) {
-      console.error("Request error: " + error);
-      // Handle the request errors
-    },
     onResponse({ request, response, options }) {
-      // Process the response data
       if (response.ok) {
         store.saveUser(user);
         router.push("/landing");
       } else {
-        console.log(response);
         errors.isAny = true;
-        errors.text = Object.values(response._data);
+        errors.text = Object.values(response._data).flat();
       }
     },
   });
 };
+
+definePageMeta({
+  layout: "auth",
+});
 </script>
+
+<style scoped lang="scss">
+section {
+  flex-grow: 1;
+  height: 100vh;
+
+  h1,
+  .subtitle {
+    text-align: center;
+    margin: 0px auto;
+  }
+}
+</style>
