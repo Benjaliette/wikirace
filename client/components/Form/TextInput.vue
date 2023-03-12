@@ -154,4 +154,16 @@ const errored = computed(() => {
     }
   }
 }
+
+@media (max-width: 960px) {
+  .form-group {
+    .form-control {
+      padding: 0px;
+    }
+
+    .form-label {
+      top: 15px;
+    }
+  }
+}
 </style>

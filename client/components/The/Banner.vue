@@ -46,8 +46,34 @@ section {
 }
 
 @media (max-width: 960px) {
-  section .img__background {
-    height: 60%;
+  section {
+    width: 100%;
+
+    .logo {
+      flex-grow: 0;
+      height: 16%;
+
+      a {
+        width: 70%;
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+    .img__background {
+      height: 60%;
+    }
+  }
+}
+
+@media (max-width: 540px) {
+  section {
+    .logo {
+      a {
+        width: 55%;
+      }
+    }
   }
 }
 </style>

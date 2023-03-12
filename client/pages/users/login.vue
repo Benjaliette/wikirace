@@ -92,4 +92,28 @@ section {
     margin: 0px auto;
   }
 }
+
+@media (max-width: 960px) {
+  section {
+    position: absolute;
+    top: 16%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    background-color: $medium-light-gray;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 540px) {
+  section {
+    position: absolute;
+    top: 14%;
+    left: 8%;
+    width: 84%;
+    height: 83%;
+    background-color: $medium-light-gray;
+    border-radius: 10px;
+  }
+}
 </style>

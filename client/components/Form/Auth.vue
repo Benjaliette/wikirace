@@ -114,4 +114,19 @@ const submitForm = () => {
     }
   }
 }
+
+@media (max-width: 960px) {
+  .section__div {
+    width: 90%;
+    .form__header {
+      margin-bottom: 2rem;
+    }
+
+    form {
+      .form__inputs {
+        margin-bottom: 3rem;
+      }
+    }
+  }
+}
 </style>

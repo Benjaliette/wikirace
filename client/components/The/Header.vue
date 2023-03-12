@@ -9,17 +9,19 @@
           <img src="~/assets/images/logo-dark-sm.png" alt="logo" />
         </NuxtLink>
       </div>
-      <div class="nav-menu" :class="{ open: toggled }">
-        <NavLinks />
-        <div class="nav-account">
-          <NuxtLink v-if="!userLogged" to="/users/login">
-            <h3>Connexion</h3>
-          </NuxtLink>
-          <BaseDropdownButton v-else color="dark" for="user">
-            Bienvenue {{ username }}
-          </BaseDropdownButton>
+      <Transition>
+        <div v-if="canToggle" class="nav-menu">
+          <NavLinks />
+          <div class="nav-account">
+            <NuxtLink v-if="!userLogged" to="/users/login">
+              <h3>Connexion</h3>
+            </NuxtLink>
+            <BaseDropdownButton v-else color="dark" for="user">
+              Bienvenue {{ username }}
+            </BaseDropdownButton>
+          </div>
         </div>
-      </div>
+      </Transition>
       <span></span>
     </div>
   </nav>
@@ -35,7 +37,13 @@ const store = useUserStore();
 const userLogged = computed(() => store.userLogged);
 const user = computed(() => store.currentUser);
 
-const isMobile = computed(() => window.innerWidth < 960);
+const canToggle = computed(() => {
+  if (window.innerWidth < 960) {
+    return toggled.value;
+  }
+
+  return true;
+});
 
 const toggle = () => {
   toggled.value = !toggled.value;
@@ -114,7 +122,6 @@ nav {
       }
 
       .nav-menu {
-        display: none;
         flex-direction: column;
         align-items: flex-start;
         position: absolute;
@@ -123,12 +130,17 @@ nav {
         background-color: $super-light-gray;
         height: 100vh;
         width: 80%;
-
-        &.open {
-          display: block;
-        }
       }
     }
+  }
+
+  .v-leave-active,
+  .v-enter-active {
+    transition: 0.4s;
+  }
+  .v-enter-from,
+  .v-leave-to {
+    transform: translate(-100%, 0);
   }
 }
 </style>
