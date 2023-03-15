@@ -1,0 +1,28 @@
+version: "3"
+services:
+  api:
+    build: ./api
+    command: bash -c "python manage.py migrate && python manage.py collectstatic --no-input --clear && python manage.py runserver  0.0.0.0:8000"
+    expose:
+      - "8000"
+    volumes:
+      - ./api:/usr/src/app
+      - static:/usr/src/app/static_root
+      - media:/usr/src/app/media
+    environment:
+      - SECRET_KEY
+      - DEBUG=True
+
+  client:
+    build:
+      context: ./client
+      args:
+        - BASE_API=http://api:8000/api
+    expose:
+      - "3000"
+    command: "yarn dev"
+    environment:
+      - BASE_API=http://api:8000/api
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
